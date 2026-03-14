@@ -1,0 +1,32 @@
+{
+  "name": "ai-escrow-backend",
+  "version": "1.0.0",
+  "description": "AI-controlled escrow backend on Polygon Amoy testnet",
+  "type": "module",
+  "main": "server/server.js",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "deploy": "node scripts/deploy.js",
+    "resolve": "node scripts/resolve.js"
+  },
+  "keywords": [
+    "escrow",
+    "polygon",
+    "hardhat",
+    "ethers",
+    "ai"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "hardhat": "^2.17.0",
+    "nodemon": "^3.1.14"
+  }
+}
