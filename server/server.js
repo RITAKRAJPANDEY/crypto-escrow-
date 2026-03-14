@@ -23,6 +23,7 @@ if (!ARBITER_ADDRESS) {
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const artifactPath = path.resolve(
   __dirname,

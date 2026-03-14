@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Escrow Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
+        input, button { margin: 5px; padding: 5px; }
+        #output { margin-top: 20px; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>AI Escrow Frontend</h1>
+
+    <form id="createEscrowForm">
+        <h3>Create Milestone Escrow</h3>
+        <input type="text" id="freelancerAddress" placeholder="Freelancer Address" required>
+        <input type="number" id="depositAmount" placeholder="Deposit Amount (ETH)" step="0.01" required>
+        <button type="submit">Create Escrow</button>
+    </form>
+
+    <form id="planProjectForm">
+        <h3>Plan Project</h3>
+        <textarea id="projectDescription" placeholder="Project Description" required></textarea>
+        <input type="number" id="totalBudget" placeholder="Total Budget (ETH)" step="0.01" required>
+        <button type="submit">Plan Project</button>
+    </form>
+
+    <form id="createBreakdownForm">
+        <h3>Create Project Breakdown</h3>
+        <input type="text" id="contractAddress" placeholder="Contract Address" required>
+        <textarea id="projectDesc" placeholder="Project Description" required></textarea>
+        <input type="number" id="budget" placeholder="Total Budget (ETH)" step="0.01" required>
+        <input type="number" id="numMilestones" placeholder="Number of Milestones" required>
+        <button type="submit">Create Breakdown</button>
+    </form>
+
+    <form id="submitProofForm">
+        <h3>Submit Proof</h3>
+        <input type="text" id="contractAddr" placeholder="Contract Address" required>
+        <input type="number" id="milestoneId" placeholder="Milestone ID" required>
+        <input type="text" id="proofHash" placeholder="Proof Hash (IPFS, GitHub, etc.)" required>
+        <button type="submit">Submit Proof</button>
+    </form>
+
+    <form id="resolveMilestoneForm">
+        <h3>Approve Milestone</h3>
+        <input type="text" id="resolveContractAddr" placeholder="Contract Address" required>
+        <input type="number" id="resolveMilestoneId" placeholder="Milestone ID" required>
+        <input type="number" id="releasePercentage" placeholder="Release Percentage (0-100)" min="0" max="100" required>
+        <button type="submit">Approve Milestone</button>
+    </form>
+
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById('output');
+
+        function log(message) {
+            output.textContent += message + '\n';
+        }
+
+        document.getElementById('createEscrowForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const freelancerAddress = document.getElementById('freelancerAddress').value;
+            const depositAmount = document.getElementById('depositAmount').value;
+            try {
+                const res = await fetch('/create-milestone-escrow', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ freelancerAddress, depositAmount })
+                });
+                const data = await res.json();
+                log('Create Escrow Response: ' + JSON.stringify(data, null, 2));
+            } catch (err) {
+                log('Error: ' + err.message);
+            }
+        });
+
+        document.getElementById('planProjectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const projectDescription = document.getElementById('projectDescription').value;
+            const totalBudget = document.getElementById('totalBudget').value;
+            try {
+                const res = await fetch('/plan-project', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ projectDescription, totalBudget })
+                });
+                const data = await res.json();
+                log('Plan Project Response: ' + JSON.stringify(data, null, 2));
+            } catch (err) {
+                log('Error: ' + err.message);
+            }
+        });
+
+        document.getElementById('createBreakdownForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const contractAddress = document.getElementById('contractAddress').value;
+            const projectDescription = document.getElementById('projectDesc').value;
+            const totalBudget = document.getElementById('budget').value;
+            const numberOfMilestones = document.getElementById('numMilestones').value;
+            try {
+                const res = await fetch('/create-project-breakdown', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contractAddress, projectDescription, totalBudget, numberOfMilestones })
+                });
+                const data = await res.json();
+                log('Create Breakdown Response: ' + JSON.stringify(data, null, 2));
+            } catch (err) {
+                log('Error: ' + err.message);
+            }
+        });
+
+        document.getElementById('submitProofForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const contractAddress = document.getElementById('contractAddr').value;
+            const milestoneId = document.getElementById('milestoneId').value;
+            const proofHash = document.getElementById('proofHash').value;
+            try {
+                const res = await fetch('/submit-proof', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contractAddress, milestoneId, proofHash })
+                });
+                const data = await res.json();
+                log('Submit Proof Response: ' + JSON.stringify(data, null, 2));
+            } catch (err) {
+                log('Error: ' + err.message);
+            }
+        });
+
+        document.getElementById('resolveMilestoneForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const contractAddress = document.getElementById('resolveContractAddr').value;
+            const milestoneId = document.getElementById('resolveMilestoneId').value;
+            const releasePercentage = document.getElementById('releasePercentage').value;
+            try {
+                const res = await fetch('/approve-milestone', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contractAddress, milestoneId, releasePercentage })
+                });
+                const data = await res.json();
+                log('Approve Milestone Response: ' + JSON.stringify(data, null, 2));
+            } catch (err) {
+                log('Error: ' + err.message);
+            }
+        });
+    </script>
+</body>
+</html>
